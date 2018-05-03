@@ -34,6 +34,7 @@ option(FEATURE_SERVICE_COTA_ENABLED       "config ota enabled or not"           
 option(FEATURE_SUPPORT_PRODUCT_SECRET     "support via product_secret get device_secret"            OFF)
 #option(FEATURE_OTA_FETCH_CHANNEL         "specify ota fetch channel"                                ON)HTTP
 #option(FEATURE_OTA_SIGNAL_CHANNEL        "specify ota signal channel"                               ON)MQTT
+option(TLS_USING_OPENSSL				  "using openssl for TLS"									OFF)
 set(GCC_ARCH native CACHE STRING "GCC compile for specific architecture.")
 
 ########################################################################
@@ -110,6 +111,21 @@ endif(WIN32)
 message(STATUS "iotx sdk version:\t" ${iotx_sdk_version})
 message(STATUS "---------------------------------------------")
 
+if(TLS_USING_OPENSSL)
+	message(STATUS "using openssl.......")
+	if(${OPENSSL_LIB_DIR})
+		link_directories(${OPENSSL_LIB_DIR})
+	else(${OPENSSL_LIB_DIR})
+		link_directories(/usr/local/ssl/lib)
+	endif(${OPENSSL_LIB_DIR})
+
+	if(${OPENSSL_INCLUDE_DIR})
+		include_directories(${OPENSSL_INCLUDE_DIR})
+	else(${OPENSSL_INCLUDE_DIR})
+		include_directories(/usr/local/ssl/include)
+	endif(${OPENSSL_INCLUDE_DIR})
+	
+endif(TLS_USING_OPENSSL)
 ########################################################################
 # git clone integrated repos
 ########################################################################

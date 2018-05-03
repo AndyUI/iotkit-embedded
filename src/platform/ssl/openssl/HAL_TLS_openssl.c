@@ -12,8 +12,19 @@ static X509_STORE *ca_store = NULL;
 static X509 *ca = NULL;
 
 
+#if defined(_WIN32)
 #pragma comment(lib,"libeay32.lib")
 #pragma comment(lib,"ssleay32.lib")
+#elif defined(__GNUC__)
+unsigned long GetTickCount()
+{
+	struct timespec ts;
+
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+
+	return (ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
+}
+#endif
 
 
 #define PLATFORM_WINSOCK_LOG    printf
@@ -150,10 +161,10 @@ static int ssl_establish(int sock, SSL **ppssl)
         goto err;
     }
 
-    /* if (ssl_verify_ca(server_cert) != 0) */
-    /* { */
-    /*     goto err; */
-    /* } */
+    if (ssl_verify_ca(server_cert) != 0)
+    {
+         goto err;
+    }
 
     X509_free(server_cert);
 

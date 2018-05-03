@@ -42,3 +42,4 @@ src/packages/Link-CMP/
 src/packages/Link-OTA/
 src/packages/iotkit-system/
 src/packages/mbedtls-in-iotkit/
+cmake.build

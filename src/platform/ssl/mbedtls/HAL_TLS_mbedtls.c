@@ -185,43 +185,43 @@ static int _ssl_client_init(mbedtls_ssl_context *ssl,
 
 
     /* Setup Client Cert/Key */
-#if defined(MBEDTLS_X509_CRT_PARSE_C)
-#if defined(MBEDTLS_CERTS_C)
-    mbedtls_x509_crt_init(crt509_cli);
-    mbedtls_pk_init(pk_cli);
-#endif
-    if (cli_crt != NULL && cli_key != NULL) {
-#if defined(MBEDTLS_CERTS_C)
-        SSL_LOG("start prepare client cert .");
-        ret = mbedtls_x509_crt_parse(crt509_cli, (const unsigned char *) cli_crt, cli_len);
-#else
-        {
-            ret = 1;
-            SSL_LOG("MBEDTLS_CERTS_C not defined.");
-        }
-#endif
-        if (ret != 0) {
-            SSL_LOG(" failed!  mbedtls_x509_crt_parse returned -0x%x\n", -ret);
-            return ret;
-        }
-
-#if defined(MBEDTLS_CERTS_C)
-        SSL_LOG("start mbedtls_pk_parse_key[%s]", cli_pwd);
-        ret = mbedtls_pk_parse_key(pk_cli, (const unsigned char *) cli_key, key_len, (const unsigned char *) cli_pwd, pwd_len);
-#else
-        {
-            ret = 1;
-            SSL_LOG("MBEDTLS_CERTS_C not defined.");
-        }
-#endif
-
-        if (ret != 0) {
-            SSL_LOG(" failed\n  !  mbedtls_pk_parse_key returned -0x%x\n", -ret);
-            return ret;
-        }
-    }
-#endif /* MBEDTLS_X509_CRT_PARSE_C */
-
+//#if defined(MBEDTLS_X509_CRT_PARSE_C)
+//#if defined(MBEDTLS_CERTS_C)
+//    mbedtls_x509_crt_init(crt509_cli);
+//    mbedtls_pk_init(pk_cli);
+//#endif
+//    if (cli_crt != NULL && cli_key != NULL) {
+//#if defined(MBEDTLS_CERTS_C)
+//        SSL_LOG("start prepare client cert .");
+//        ret = mbedtls_x509_crt_parse(crt509_cli, (const unsigned char *) cli_crt, cli_len);
+//#else
+//        {
+//            ret = 1;
+//            SSL_LOG("MBEDTLS_CERTS_C not defined.");
+//        }
+//#endif
+//        if (ret != 0) {
+//            SSL_LOG(" failed!  mbedtls_x509_crt_parse returned -0x%x\n", -ret);
+//            return ret;
+//        }
+//
+//#if defined(MBEDTLS_CERTS_C)
+//        SSL_LOG("start mbedtls_pk_parse_key[%s]", cli_pwd);
+//        ret = mbedtls_pk_parse_key(pk_cli, (const unsigned char *) cli_key, key_len, (const unsigned char *) cli_pwd, pwd_len);
+//#else
+//        {
+//            ret = 1;
+//            SSL_LOG("MBEDTLS_CERTS_C not defined.");
+//        }
+//#endif
+//
+//        if (ret != 0) {
+//            SSL_LOG(" failed\n  !  mbedtls_pk_parse_key returned -0x%x\n", -ret);
+//            return ret;
+//        }
+//    }
+//	
+//#endif /* MBEDTLS_X509_CRT_PARSE_C */
     return 0;
 }
 
@@ -387,10 +387,10 @@ static int _TLSConnectNetwork(TLSDataParams_t *pTlsData, const char *addr, const
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     mbedtls_ssl_conf_ca_chain(&(pTlsData->conf), &(pTlsData->cacertl), NULL);
 
-    if ((ret = mbedtls_ssl_conf_own_cert(&(pTlsData->conf), &(pTlsData->clicert), &(pTlsData->pkey))) != 0) {
+    /*if ((ret = mbedtls_ssl_conf_own_cert(&(pTlsData->conf), &(pTlsData->clicert), &(pTlsData->pkey))) != 0) {
         SSL_LOG(" failed\n  ! mbedtls_ssl_conf_own_cert returned %d\n", ret);
         return ret;
-    }
+    }*/
 #endif
     mbedtls_ssl_conf_rng(&(pTlsData->conf), _ssl_random, NULL);
     mbedtls_ssl_conf_dbg(&(pTlsData->conf), _ssl_debug, NULL);

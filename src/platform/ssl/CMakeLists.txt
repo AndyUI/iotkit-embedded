@@ -1,1 +1,5 @@
-add_subdirectory(mbedtls)
+IF(TLS_USING_OPENSSL)
+	add_subdirectory(openssl)
+ELSE(TLS_USING_OPENSSL)
+	add_subdirectory(mbedtls)
+ENDIF(TLS_USING_OPENSSL)

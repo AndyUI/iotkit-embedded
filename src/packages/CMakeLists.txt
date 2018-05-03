@@ -2,7 +2,12 @@ include_directories(${PROJECT_SOURCE_DIR}/import/ubuntu/include)
 
 add_definitions(-DCMP_VIA_MQTT_DIRECT)
 
-file(GLOB PACKAGES_CONNECTIVITY_SOURCES "Link-OTA/src/ota.c" "Link-MQTT/*.c" "Link-MQTT/MQTTPacket/*.c" "iotkit-system/src/*.c" "LITE-log/*.c" "LITE-utils/*.c" "mbedtls-in-iotkit/library/*.c" "iot-coap-c/*.c")
+file(GLOB PACKAGES_CONNECTIVITY_SOURCES "Link-OTA/src/ota.c" "Link-MQTT/*.c" "Link-MQTT/MQTTPacket/*.c" "iotkit-system/src/*.c" "LITE-log/*.c" "LITE-utils/*.c" "iot-coap-c/*.c")
+
+IF(NOT TLS_USING_OPENSSL)
+	file(GLOB MBEDTLS "mbedtls-in-iotkit/library/*.c")
+	set(PACKAGES_CONNECTIVITY_SOURCES ${PACKAGES_CONNECTIVITY_SOURCES} ${MBEDTLS})
+ENDIF(NOT TLS_USING_OPENSSL)
 
 if(FEATURE_CMP_ENABLED)
     file(GLOB PACKAGES_CONNECTIVITY_SOURCES ${PACKAGES_CONNECTIVITY_SOURCES} "Link-CMP/src/*.c")

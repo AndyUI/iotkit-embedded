@@ -21,10 +21,15 @@ endif(FEATURE_CMP_ENABLED)
 set(iot_sdk_c_sources $<TARGET_OBJECTS:iotkit_packages>
                       $<TARGET_OBJECTS:coap>
                       $<TARGET_OBJECTS:iot_http>
-                      $<TARGET_OBJECTS:platform_ssl_mbedtls>
                       $<TARGET_OBJECTS:iot_shadow>
                       $<TARGET_OBJECTS:utils_digest>
                       $<TARGET_OBJECTS:utils_misc>)
+
+if(NOT TLS_USING_OPENSSL)
+	set(iot_sdk_c_sources ${iot_sdk_c_sources} $<TARGET_OBJECTS:platform_ssl_mbedtls>)
+else(NOT TLS_USING_OPENSSL)
+	set(iot_sdk_c_sources ${iot_sdk_c_sources} $<TARGET_OBJECTS:platform_openssl>)
+endif(NOT TLS_USING_OPENSSL)
 
 if(FEATURE_SUBDEVICE_ENABLED)
     set(iot_sdk_c_sources ${iot_sdk_c_sources} $<TARGET_OBJECTS:iot_subdev>)
